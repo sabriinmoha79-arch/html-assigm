@@ -1,0 +1,81 @@
+
+    // Array to  objects
+    let studentData = [];
+
+    // Event Listener
+    document.getElementById('addBtn').addEventListener('click', function() {
+        const nameEl = document.getElementById('stdName');
+        const scoreEl = document.getElementById('stdScore');
+
+        const name = nameEl.value.trim();
+        const score = parseFloat(scoreEl.value);
+
+        // Input Validation
+        if (name === "" || isNaN(score)) {
+            showMsg("Error: Please fill in all fields!", "red");
+            return;
+        }
+        if (score < 0 || score > 100) {
+            showMsg("Error: Score must be between 0 and 100!", "red");
+            return;
+        }
+
+        // Logic & Functions
+        let grade = "";
+        if (score >= 90) grade = "A";
+        else if (score >= 80) grade = "B";
+        else if (score >= 70) grade = "C";
+        else if (score >= 60) grade = "D";
+        else grade = "F";
+
+        let status = (score >= 50) ? "Passed" : "Failed";
+
+        // Object Creation
+        const student = {
+            name: name,
+            score: score,
+            grade: grade,
+            status: status
+        };
+
+        // Add to Array
+        studentData.push(student);
+
+        // Update DOM
+        renderTable();
+        showMsg("Success: Student added successfully!", "green");
+
+        // Clear Inputs
+        nameEl.value = "";
+        scoreEl.value = "";
+    });
+
+    function renderTable() {
+        const tbody = document.getElementById('studentBody');
+        tbody.innerHTML = ""; 
+
+        studentData.forEach(s => {
+            const row = `<tr>
+                <td>${s.name}</td>
+                <td>${s.score}</td>
+                <td>${s.grade}</td>
+                <td class="${s.status === 'Passed' ? 'pass' : 'fail'}">${s.status}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+
+    function showMsg(txt, type) {
+        const fb = document.getElementById('feedback');
+        fb.textContent = txt;
+        fb.style.display = "block";
+        fb.style.backgroundColor = type === "red" ? "#f8d7da" : "#d4edda";
+        fb.style.color = type === "red" ? "#721c24" : "#155724";
+        
+        setTimeout(() => {
+            fb.style.display = "none";
+        }, 3000);
+    }
+
+
+
